@@ -54,13 +54,13 @@ namespace ShopClothing.Application.Services.Implementations.Category
                               : new ServiceResponse(false, "Category Not Updated");
         }
 
-        public async Task<IEnumerable<GetProduct>> GetProductsByCategory(Guid categoryId)
+        public async Task<IEnumerable<GetProductByCategoryID>> GetProductsByCategory(Guid categoryId)
         {
            var products = await categorySpecifics.GetProductsByCategory(categoryId);
            
             if(!products.Any()) return [];
 
-            return mapper.Map<IEnumerable<GetProduct>>(products);
+            return mapper.Map<IEnumerable<GetProductByCategoryID>>(products);
         }
     }
 }

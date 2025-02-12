@@ -2,6 +2,6 @@
 {
     public class GetProduct : ProductBase
     {
-        public Guid Id { get; set; }
+        public Guid ProductID { get; set; }
     }
 }

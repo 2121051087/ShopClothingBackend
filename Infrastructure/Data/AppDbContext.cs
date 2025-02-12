@@ -41,7 +41,7 @@ namespace ShopClothing.Infrastructure.Data
                    NormalizedName = "USER"
                }
 
-           );
+             );
 
             // Colors Table
                    #region Seed Color Data

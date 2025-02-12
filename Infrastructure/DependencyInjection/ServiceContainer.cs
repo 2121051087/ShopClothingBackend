@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using ShopClothing.Application.Services.Interfaces.Logging;
 using ShopClothing.Domain.Entities.Category;
 using ShopClothing.Domain.Entities.Identity;
+using ShopClothing.Domain.Entities.Product;
 using ShopClothing.Domain.Interface;
 using ShopClothing.Domain.Interface.Authentication;
 using ShopClothing.Domain.Interface.CategorySpecifics;
@@ -78,6 +79,8 @@ namespace ShopClothing.Infrastructure.DependencyInjection
 
 
             services.AddScoped<IGeneric<Categories>, GenericRepository<Categories>>();
+            services.AddScoped<IGeneric<Products>, GenericRepository<Products>>();
+            services.AddScoped<IGeneric<Product_Attributes>, GenericRepository<Product_Attributes>>();
             services.AddScoped<ICategorySpecifics, CategorySpecificsRepository>();
 
 

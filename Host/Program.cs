@@ -1,3 +1,4 @@
+﻿using Microsoft.Extensions.FileProviders;
 using ShopClothing.Application.DependencyInjection;
 using ShopClothing.Infrastructure.DependencyInjection;
 
@@ -16,6 +17,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(webRootPath),
+    RequestPath = "/wwwroot"
+});
+
+
 
 app.UseInfrastructureService();
 app.UseHttpsRedirection();

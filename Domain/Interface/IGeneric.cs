@@ -14,5 +14,7 @@ namespace ShopClothing.Domain.Interface
         Task<int> UpdateAsync(TEntity entity);
         Task<int> DeleteAsync(Guid id);
 
+        Task<int> AddRangeAsync(IEnumerable<TEntity> entities);
+
     }
 }

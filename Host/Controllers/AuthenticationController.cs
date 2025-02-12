@@ -29,7 +29,7 @@ namespace ShopClothing.Host.Controllers
        
         public async Task<IActionResult> ReviveToken(string refreshToken)
         {
-            //string encodedToken = WebUtility.UrlEncode(refreshToken); // Encode lại token
+            string encodedToken = WebUtility.UrlEncode(refreshToken); // Encode lại token
             var result = await authenticationService.ReviveToken(refreshToken);
             return result.Success ? Ok(result) : BadRequest(result);
         }

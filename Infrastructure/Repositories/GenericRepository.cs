@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopClothing.Domain.Interface;
 using ShopClothing.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ShopClothing.Infrastructure.Repositories
 {
@@ -14,6 +10,12 @@ namespace ShopClothing.Infrastructure.Repositories
         public async Task<int> AddAsync(TEntity entity)
         {
             context.Set<TEntity>().Add(entity);
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<int> AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            context.Set<TEntity>().AddRange(entities);
             return await context.SaveChangesAsync();
         }
 

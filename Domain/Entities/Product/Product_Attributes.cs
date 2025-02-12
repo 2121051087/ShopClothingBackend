@@ -1,7 +1,5 @@
 ﻿
-
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace ShopClothing.Domain.Entities.Product
@@ -21,8 +19,7 @@ namespace ShopClothing.Domain.Entities.Product
 
         public string? ImageUrl { get; set; }
 
-        [Column(TypeName ="decimal(18, 2)")]
-        public decimal Price { get; set; }
+      
 
         [JsonIgnore]
         public Products? Products { get; set; }
