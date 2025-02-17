@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ShopClothing.Application.DTOs;
 using ShopClothing.Application.DTOs.Category;
-using ShopClothing.Application.DTOs.Product;
 using ShopClothing.Application.Services.Interfaces.Category;
 using ShopClothing.Domain.Entities.Category;
 using ShopClothing.Domain.Interface;

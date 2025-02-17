@@ -1,6 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using ShopClothing.Application.DTOs.Product.ProductAttributes;
+using System.Text.Json.Serialization;
 
-namespace ShopClothing.Application.DTOs.Product.ProductAttributes
+namespace ShopClothing.Application.DTOs.Product.Size
 {
     public class GetSizes
     {

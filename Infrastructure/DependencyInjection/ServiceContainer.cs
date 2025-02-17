@@ -7,15 +7,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ShopClothing.Application.Services.Interfaces.Logging;
+using ShopClothing.Domain.Entities.Cart;
 using ShopClothing.Domain.Entities.Category;
 using ShopClothing.Domain.Entities.Identity;
 using ShopClothing.Domain.Entities.Product;
 using ShopClothing.Domain.Interface;
 using ShopClothing.Domain.Interface.Authentication;
+using ShopClothing.Domain.Interface.Cart;
 using ShopClothing.Domain.Interface.CategorySpecifics;
 using ShopClothing.Infrastructure.Data;
 using ShopClothing.Infrastructure.Repositories;
 using ShopClothing.Infrastructure.Repositories.Authentication;
+using ShopClothing.Infrastructure.Repositories.Cart;
 using ShopClothing.Infrastructure.Repositories.CategorySpecifics;
 using ShopClothing.Infrastructure.Services;
 using System.Text;
@@ -81,7 +84,12 @@ namespace ShopClothing.Infrastructure.DependencyInjection
             services.AddScoped<IGeneric<Categories>, GenericRepository<Categories>>();
             services.AddScoped<IGeneric<Products>, GenericRepository<Products>>();
             services.AddScoped<IGeneric<Product_Attributes>, GenericRepository<Product_Attributes>>();
+            services.AddScoped<IGeneric<Sizes>, GenericRepository<Sizes>>();
+            services.AddScoped<IGeneric<Colors>, GenericRepository<Colors>>();
             services.AddScoped<ICategorySpecifics, CategorySpecificsRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IGeneric<Carts>, GenericRepository<Carts>>();
+            services.AddScoped<IGeneric<CartItems>, GenericRepository<CartItems>>();
 
 
             services.AddScoped<IUserManagement, UserManagementRepository>();

@@ -7,7 +7,7 @@ namespace ShopClothing.Application.Services.Interfaces.Product
 {
     public interface IProductAttributeService
     {
-        Task<IEnumerable<GetProductAttributes>> GetAllAsync();
+        Task<IEnumerable<GetProductAttributes>>? GetAllAsync();
         Task<GetProduct> GetByIdAsync(Guid id);
         Task<ServiceResponse> AddAsync(CreateProductAttribute productAttribute);
         Task<ServiceResponse> UpdateAsync(UpdateProductAttributes productAttribute);

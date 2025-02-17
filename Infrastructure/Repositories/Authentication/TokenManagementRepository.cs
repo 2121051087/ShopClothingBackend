@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ShopClothing.Domain.Entities.Identity;
 using ShopClothing.Domain.Interface.Authentication;
+using ShopClothing.Domain.Interface.Cart;
 using ShopClothing.Infrastructure.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -13,7 +14,7 @@ using System.Text;
 
 namespace ShopClothing.Infrastructure.Repositories.Authentication
 {
-    public class TokenManagementRepository(AppDbContext context, IConfiguration config) : ITokenManagement
+    public class TokenManagementRepository(AppDbContext context, IConfiguration config ,ICartRepository cartRepository) : ITokenManagement
     {
         public async Task<int> AddRefreshToken(string userId, string refreshToken)
         {
@@ -30,12 +31,20 @@ namespace ShopClothing.Infrastructure.Repositories.Authentication
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.UtcNow.AddHours(2);
+            var userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var cart = cartRepository.GetOrCreateCartAsync(userId).Result;
+
+            // Add cart information to claims
+            claims.Add(new Claim("CartID", cart.CartID.ToString()));
+            
+
             var token = new JwtSecurityToken(
                 issuer: config["JWT:Issuer"],
                 audience: config["JWT:Audience"],
                 claims: claims,
                 expires: expiration,
-                signingCredentials: cred);
+                signingCredentials: cred
+            );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

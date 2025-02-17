@@ -1,5 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Http;
+using ShopClothing.Application.DTOs.Product.Color;
+using ShopClothing.Application.DTOs.Product.Size;
 using System.Text.Json.Serialization;
 
 namespace ShopClothing.Application.DTOs.Product.ProductAttributes

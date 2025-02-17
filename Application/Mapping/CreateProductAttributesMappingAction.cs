@@ -6,11 +6,11 @@ using ShopClothing.Domain.Entities.Product;
 
 namespace ShopClothing.Application.Mapping
 {
-    public class ProductAttributesMappingAction : IMappingAction<CreateProductAttribute, Product_Attributes>
+    public class CreateProductAttributesMappingAction : IMappingAction<CreateProductAttribute, Product_Attributes>
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductAttributesMappingAction(IWebHostEnvironment webHostEnvironment)
+        public CreateProductAttributesMappingAction(IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
         }

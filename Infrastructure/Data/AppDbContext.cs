@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ShopClothing.Domain.Entities.Cart;
 using ShopClothing.Domain.Entities.Category;
 using ShopClothing.Domain.Entities.Identity;
+using ShopClothing.Domain.Entities.Order;
+using ShopClothing.Domain.Entities.Payment;
 using ShopClothing.Domain.Entities.Product;
 
 namespace ShopClothing.Infrastructure.Data
@@ -19,6 +22,21 @@ namespace ShopClothing.Infrastructure.Data
         public DbSet<Sizes> Sizes { get; set; }
         public DbSet<Colors> Colors { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+
+        public DbSet<Carts> Carts { get; set; }
+        public DbSet<CartItems> CartItems { get; set; }
+
+
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<Transactions> Transactions { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -145,8 +163,6 @@ namespace ShopClothing.Infrastructure.Data
 
 
             // Product_Attributes Table
-
-
             builder.Entity<Product_Attributes>(entity =>
             {
                 entity.ToTable("Product_Attributes")
@@ -174,6 +190,100 @@ namespace ShopClothing.Infrastructure.Data
                 .HasForeignKey(pa => pa.SizeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+
+            // Carts Table
+
+            builder.Entity<Carts>(entity =>
+            {
+                entity.ToTable("Carts")
+                      .HasKey(c => c.CartID);
+            });
+
+
+            builder.Entity<CartItems>(entity =>
+            {
+                entity.ToTable("CartItems")
+                      .HasKey(ci => ci.CartItemID);
+                entity.HasOne(c => c.Carts)
+                      .WithMany(ci => ci.CartItems)
+                      .HasForeignKey(ci => ci.CartID)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(p => p.Products)
+                      .WithMany(ci => ci.CartItems)
+                      .HasForeignKey(ci => ci.ProductID)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(pa => pa.Product_Attributes)
+                      .WithMany(ci => ci.CartItems)
+                      .HasForeignKey(ci => ci.Product_AttributeID)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+
+            // payment method table
+            builder.Entity<PaymentMethod>(entity =>
+            {
+                entity.ToTable("PaymentMethods")
+                      .HasKey(pm => pm.PaymentMethodID);
+            });
+
+            builder.Entity<PaymentMethod>()
+                .HasData(
+                new PaymentMethod
+                {
+                    PaymentMethodID = Guid.NewGuid(),
+                    PaymentMethodName = "Cash On Delivery"
+                },
+                new PaymentMethod
+                {
+                    PaymentMethodID = Guid.NewGuid(),
+                    PaymentMethodName = "Credit Card"
+                },
+                new PaymentMethod
+                {
+                    PaymentMethodID = Guid.NewGuid(),
+                    PaymentMethodName = "Pay Pal"
+                }
+                );
+
+            // transactions table
+
+            builder.Entity<Transactions>(entity =>
+            {
+                entity.ToTable("Transactions")
+                      .HasKey(t => t.TransactionID);
+
+                entity.HasOne(pm => pm.PaymentMethod);
+            });
+
+
+            // order 
+
+            builder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Orders")
+                      .HasKey(o => o.OrderID);
+                entity.HasOne(entity => entity.Transaction);
+            });
+
+            // orderDetail
+            builder.Entity<OrderDetails>(entity =>
+            {
+                entity.ToTable("OrderDetails")
+                      .HasKey(od => od.OrderDetailID);
+                entity.HasOne(o => o.Order)
+                      .WithMany(od => od.Details)
+                      .HasForeignKey(od => od.OrderID)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(p => p.Products)
+                      .WithMany(od => od.OrderDetails)
+                      .HasForeignKey(od => od.ProductID)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(pa => pa.Product_Attributes)
+                      .WithMany(od => od.OrderDetails)
+                      .HasForeignKey(od => od.Product_AttributeID)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
     }

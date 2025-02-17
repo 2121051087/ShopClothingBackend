@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShopClothing.Application.DTOs;
 using ShopClothing.Application.DTOs.Product;
+using ShopClothing.Application.DTOs.Product.ProductAttributes;
 using ShopClothing.Application.Services.Interfaces.Product;
 using ShopClothing.Domain.Entities.Product;
 using ShopClothing.Domain.Interface;
@@ -34,24 +35,69 @@ namespace ShopClothing.Application.Services.Implementations.Product
 
         }
 
-        public Task<ServiceResponse> DeleteAsync(Guid id)
+        public async Task<ServiceResponse> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+           int result = await ProductInterface.DeleteAsync(id);
+
+            return result > 0 ? new ServiceResponse(true, "Product Deleted Successfully")
+                              : new ServiceResponse(false, "Product Not Deleted");
         }
 
-        public Task<IEnumerable<GetProduct>> GetAllAsync()
+        public async Task<IEnumerable<GetProduct>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var Data = await ProductInterface.GetAllAsync();
+            if (!Data.Any()) return [];
+
+            var productDto = mapper.Map<IEnumerable<GetProduct>>(Data);
+            foreach (var product in productDto)
+            {
+                var attributes = await Product_AttributesInterfaces.GetAllAsync();
+                product.GetProductAttributes = attributes
+                    .Where(attr => attr.ProductID == product.ProductID)
+                    .Select(attr => mapper.Map<GetProductAttributes>(attr))
+                    .ToList();
+            }
+
+            return productDto;
+
+
         }
 
-        public Task<GetProduct> GetByIdAsync(Guid id)
+        public async Task<GetProduct> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var Data = await ProductInterface.GetByIdAsync(id);
+            if (Data == null) return null!;
+
+            var productDto = mapper.Map<GetProduct>(Data);
+            var attributes = await Product_AttributesInterfaces.GetAllAsync();
+            productDto.GetProductAttributes = attributes
+                .Where(attr => attr.ProductID == id)
+                .Select(attr => mapper.Map<GetProductAttributes>(attr))
+                .ToList();
+
+            return productDto;
         }
 
-        public Task<ServiceResponse> UpdateAsync(UpdateProduct product)
+        public async Task<ServiceResponse> UpdateAsync(UpdateProduct product)
         {
-            throw new NotImplementedException();
+            var mappedData = mapper.Map<Products>(product);
+            int result = await ProductInterface.UpdateAsync(mappedData);
+
+            if(result <= 0) return new ServiceResponse(false, "Product Not Updated");
+
+            var attributesList = product.UpdateProductAttributes?.Select(attr =>
+            {
+                var mappedAttr = mapper.Map<Product_Attributes>(attr);
+                mappedAttr.ProductID = mappedData.ProductID;
+                return mappedAttr;
+            }).ToList();
+
+            if (attributesList != null && attributesList.Any())
+            {
+                await Product_AttributesInterfaces.AddRangeAsync(attributesList);
+            }
+
+            return new ServiceResponse(true, "Product & Attributes Updated");
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using ShopClothing.Application.DTOs.Product.ProductAttributes;
-using ShopClothing.Domain.Entities.Category;
-using System.Text.Json.Serialization;
-
-
+﻿
 namespace ShopClothing.Application.DTOs.Product
 {
     public class ProductBase
