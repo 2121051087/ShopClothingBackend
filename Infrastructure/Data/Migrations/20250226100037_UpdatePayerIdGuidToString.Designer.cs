@@ -12,8 +12,8 @@ using ShopClothing.Infrastructure.Data;
 namespace ShopClothing.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250217114524_DbInit")]
-    partial class DbInit
+    [Migration("20250226100037_UpdatePayerIdGuidToString")]
+    partial class UpdatePayerIdGuidToString
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6e4673e8-a314-4943-a234-1c635864147b",
+                            Id = "6e4e869a-9c27-41ea-bdda-66518bd3dec3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8db341a6-d82c-4036-b0a4-9a1a4edd0ffa",
+                            Id = "536786dd-e6fb-491e-beef-e1a8393a41eb",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -322,48 +322,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Order", b =>
-                {
-                    b.Property<Guid>("OrderID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DeliveryAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeliveryPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PaymentMethodID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("TransactionID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("OrderID");
-
-                    b.HasIndex("PaymentMethodID");
-
-                    b.HasIndex("TransactionID");
-
-                    b.ToTable("Orders", (string)null);
-                });
-
             modelBuilder.Entity("ShopClothing.Domain.Entities.Order.OrderDetails", b =>
                 {
                     b.Property<Guid>("OrderDetailID")
@@ -372,9 +330,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("OrderID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ProductID")
                         .HasColumnType("uniqueidentifier");
@@ -396,6 +351,48 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.ToTable("OrderDetails", (string)null);
                 });
 
+            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Orders", b =>
+                {
+                    b.Property<Guid>("OrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaymentMethodID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("TransactionID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderID");
+
+                    b.HasIndex("PaymentMethodID");
+
+                    b.HasIndex("TransactionID");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
             modelBuilder.Entity("ShopClothing.Domain.Entities.Payment.PaymentMethod", b =>
                 {
                     b.Property<Guid>("PaymentMethodID")
@@ -413,17 +410,17 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            PaymentMethodID = new Guid("80ae6dcb-bd1f-424a-b8cb-d640dd9fd646"),
+                            PaymentMethodID = new Guid("d1148003-4582-48ea-8231-2eb281a3d3fe"),
                             PaymentMethodName = "Cash On Delivery"
                         },
                         new
                         {
-                            PaymentMethodID = new Guid("1549cd45-4fed-4e4b-b166-7c18e62a24d5"),
+                            PaymentMethodID = new Guid("315100a4-d267-4b66-b031-0f365998cd6d"),
                             PaymentMethodName = "Credit Card"
                         },
                         new
                         {
-                            PaymentMethodID = new Guid("181ebc9b-5a4d-43ee-9e0e-96bb4e25fe21"),
+                            PaymentMethodID = new Guid("19da9456-9e55-4450-916e-6b3c07f19537"),
                             PaymentMethodName = "Pay Pal"
                         });
                 });
@@ -435,19 +432,17 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PayerID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PayerID")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PaymentID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PaymentMethodID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentReference")
                         .IsRequired()
@@ -461,8 +456,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("TransactionID");
-
-                    b.HasIndex("PaymentMethodID");
 
                     b.ToTable("Transactions", (string)null);
                 });
@@ -486,79 +479,79 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ColorID = new Guid("8ed0fa29-be99-41ed-9f12-6ec40a949525"),
+                            ColorID = new Guid("110d0bfe-52c1-4be0-ac9d-922da3be383e"),
                             ColorHexCode = "#FF0000",
                             ColorName = "Red"
                         },
                         new
                         {
-                            ColorID = new Guid("5d8dae7d-1ad8-4594-89f6-6ab57f784723"),
+                            ColorID = new Guid("0f54f40a-b64e-4ebf-b835-64ae0d7e8fb2"),
                             ColorHexCode = "#0000FF",
                             ColorName = "Blue"
                         },
                         new
                         {
-                            ColorID = new Guid("9e6d9483-972a-497f-8798-e87468ea1d72"),
+                            ColorID = new Guid("4fefec72-a491-4dda-9a19-94805cce0d5c"),
                             ColorHexCode = "#FFFFFF",
                             ColorName = "White"
                         },
                         new
                         {
-                            ColorID = new Guid("a5a78efc-f0a5-4bf6-8caa-bc1ce9b49ddb"),
+                            ColorID = new Guid("a5dc52ae-29ca-41c6-94a6-7122e31f3bbc"),
                             ColorHexCode = "#000000",
                             ColorName = "Black"
                         },
                         new
                         {
-                            ColorID = new Guid("3ea4aca1-ae34-44f1-b9b5-d3f4a006ec09"),
+                            ColorID = new Guid("63e88647-70b9-46e0-84c3-74360bdcfd0b"),
                             ColorHexCode = "#FFFF00",
                             ColorName = "Yellow"
                         },
                         new
                         {
-                            ColorID = new Guid("557a665c-064d-4859-b7c3-66309aa225c9"),
+                            ColorID = new Guid("a49d9f25-2289-4460-8222-53f87324ff85"),
                             ColorHexCode = "#008000",
                             ColorName = "Green"
                         },
                         new
                         {
-                            ColorID = new Guid("2d478c3d-8f5c-4cf5-9ec1-f69239c9b188"),
+                            ColorID = new Guid("774863c3-ba4d-4159-a039-a9b9e66b4a58"),
                             ColorHexCode = "#800080",
                             ColorName = "Purple"
                         },
                         new
                         {
-                            ColorID = new Guid("4be846a8-84cd-4128-956b-8fc7d716eda3"),
+                            ColorID = new Guid("300a8df6-c965-4892-b593-1ddf9223d7ff"),
                             ColorHexCode = "#FFC0CB",
                             ColorName = "Pink"
                         },
                         new
                         {
-                            ColorID = new Guid("62db93b1-e04d-47af-bd8c-3e097974343b"),
+                            ColorID = new Guid("9f8ee37a-cd34-4398-91fe-19d690017d20"),
                             ColorHexCode = "#FFA500",
                             ColorName = "Orange"
                         },
                         new
                         {
-                            ColorID = new Guid("8e3ca5c5-2e2e-4e69-92c8-d716ff540227"),
+                            ColorID = new Guid("747b6a95-09dc-4577-bc7b-c6a962913ac7"),
                             ColorHexCode = "#A52A2A",
                             ColorName = "Brown"
                         },
                         new
                         {
-                            ColorID = new Guid("ad9f3768-b625-4f55-bb9f-d8882a213a15"),
+                            ColorID = new Guid("5b5bf63d-df58-48d6-a05b-be28069bde03"),
                             ColorHexCode = "#808080",
                             ColorName = "Gray"
                         },
                         new
                         {
-                            ColorID = new Guid("a84227c2-6885-4823-9417-0d350cc30580"),
+                            ColorID = new Guid("999607f6-a7c6-44f6-9808-55ecbb111a14"),
                             ColorHexCode = "#C0C0C0",
                             ColorName = "Silver"
                         },
                         new
                         {
-                            ColorID = new Guid("4faf3673-5210-435c-b993-20f0076f3e2a"),
+                            ColorID = new Guid("0baeb666-1a46-4921-be87-b789d71309c0"),
                             ColorHexCode = "#FFD700",
                             ColorName = "Gold"
                         });
@@ -643,37 +636,37 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            SizeID = new Guid("d9fe57a3-a42f-46a5-9893-7b6c7a108b64"),
+                            SizeID = new Guid("89c8ab2c-26d8-4fc0-adf2-1db2776b1029"),
                             SizeName = "XS"
                         },
                         new
                         {
-                            SizeID = new Guid("9ac5921b-f6c6-40ce-b431-8c1639bbd9dc"),
+                            SizeID = new Guid("1ca41ce8-30b7-47ea-8167-0de7789768c2"),
                             SizeName = "S"
                         },
                         new
                         {
-                            SizeID = new Guid("2c164dc5-8e4b-476d-8c3f-f2756b7da668"),
+                            SizeID = new Guid("7b89b814-ce37-411c-b65b-ef4c894af626"),
                             SizeName = "M"
                         },
                         new
                         {
-                            SizeID = new Guid("ffe0a99a-8a17-4801-914b-cec5fcdb0857"),
+                            SizeID = new Guid("2ad70736-b059-4705-8505-42462b25c5af"),
                             SizeName = "L"
                         },
                         new
                         {
-                            SizeID = new Guid("4f99b3e7-db25-40fa-a00f-b1f581f78af7"),
+                            SizeID = new Guid("82267ddc-d4e8-4bfa-9c5a-7d3f853427f7"),
                             SizeName = "XL"
                         },
                         new
                         {
-                            SizeID = new Guid("493e3711-e98c-4e85-9f05-0b8393e57a18"),
+                            SizeID = new Guid("f52fabe7-87c8-4ca1-b7e1-2dcc22e7ade3"),
                             SizeName = "XXL"
                         },
                         new
                         {
-                            SizeID = new Guid("1ed2a862-4114-450e-894b-ab8f80b53cf4"),
+                            SizeID = new Guid("1b61283c-16c4-4620-92c4-c13f058e6c76"),
                             SizeName = "XXXL"
                         });
                 });
@@ -756,26 +749,9 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Order", b =>
-                {
-                    b.HasOne("ShopClothing.Domain.Entities.Payment.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShopClothing.Domain.Entities.Payment.Transactions", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionID");
-
-                    b.Navigation("PaymentMethod");
-
-                    b.Navigation("Transaction");
-                });
-
             modelBuilder.Entity("ShopClothing.Domain.Entities.Order.OrderDetails", b =>
                 {
-                    b.HasOne("ShopClothing.Domain.Entities.Order.Order", "Order")
+                    b.HasOne("ShopClothing.Domain.Entities.Order.Orders", "Order")
                         .WithMany("Details")
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -800,7 +776,7 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ShopClothing.Domain.Entities.Payment.Transactions", b =>
+            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Orders", b =>
                 {
                     b.HasOne("ShopClothing.Domain.Entities.Payment.PaymentMethod", "PaymentMethod")
                         .WithMany()
@@ -808,7 +784,13 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShopClothing.Domain.Entities.Payment.Transactions", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionID");
+
                     b.Navigation("PaymentMethod");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("ShopClothing.Domain.Entities.Product.Product_Attributes", b =>
@@ -859,7 +841,7 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Order", b =>
+            modelBuilder.Entity("ShopClothing.Domain.Entities.Order.Orders", b =>
                 {
                     b.Navigation("Details");
                 });

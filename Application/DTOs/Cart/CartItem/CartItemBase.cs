@@ -7,13 +7,13 @@ namespace ShopClothing.Application.DTOs.Cart.CartItem
     public class CartItemBase
     {
         public Guid ProductID { get; set; }
-
         public Guid CartID { get; set; }
         public Guid Product_AttributeID { get; set; }
 
+
         public int QuantityBasket { get; set; } = 1;
 
-        [JsonIgnore]
+        
         public GetProduct? GetProduct { get; set; }
         [JsonIgnore]
         public GetProductAttributes? GetProductAttributes { get; set; }

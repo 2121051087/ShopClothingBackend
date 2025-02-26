@@ -79,9 +79,32 @@ namespace ShopClothing.Application.Services.Implementations.Cart
             return _mapper.Map<GetCartItem>(data);
         }
 
-        public Task<ServiceResponse> UpdateAsync(UpdateCartItem item)
+        public async Task<ServiceResponse> UpdateAsync(UpdateCartItem item)
         {
-            throw new NotImplementedException();
+            var mappedData = _mapper.Map<CartItems>(item);  
+            int result = await _cartItemInterface.UpdateAsync(mappedData);
+            return result > 0 ? new ServiceResponse(true, "Item Updated Successfully")
+                              : new ServiceResponse(false, "Item Not Updated");
+
+        }
+
+        public async Task<ServiceResponse> ClearCartAsync()
+        {
+            var userId = _user?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+
+            var cart = await _cartRepository.GetOrCreateCartAsync(userId);
+            if (cart.CartItems == null || !cart.CartItems.Any())
+            {
+                return new ServiceResponse(false, "Cart is empty");
+            }
+
+            var result = await _cartItemInterface.DeleteRangeAsync(cart.CartItems.ToList());
+            return result > 0 ? new ServiceResponse(true, "Items deleted successfully")
+                              : new ServiceResponse(false, "Failed to delete items");
         }
     }
 }

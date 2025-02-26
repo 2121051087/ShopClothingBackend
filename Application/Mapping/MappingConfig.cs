@@ -3,6 +3,7 @@ using ShopClothing.Application.DTOs.Cart;
 using ShopClothing.Application.DTOs.Cart.CartItem;
 using ShopClothing.Application.DTOs.Category;
 using ShopClothing.Application.DTOs.Identity;
+using ShopClothing.Application.DTOs.Order;
 using ShopClothing.Application.DTOs.Product;
 using ShopClothing.Application.DTOs.Product.Color;
 using ShopClothing.Application.DTOs.Product.ProductAttributes;
@@ -10,6 +11,7 @@ using ShopClothing.Application.DTOs.Product.Size;
 using ShopClothing.Domain.Entities.Cart;
 using ShopClothing.Domain.Entities.Category;
 using ShopClothing.Domain.Entities.Identity;
+using ShopClothing.Domain.Entities.Order;
 using ShopClothing.Domain.Entities.Product;
 
 
@@ -19,7 +21,7 @@ namespace ShopClothing.Application.Mapping
     {
         public MappingConfig()
         {
-            // Category
+            //  Category
             CreateMap<CreateCategory, Categories>();
             CreateMap<UpdateCategory, Categories>();
             CreateMap<Products, GetProductByCategoryID>();
@@ -27,7 +29,7 @@ namespace ShopClothing.Application.Mapping
                 .AfterMap<CategoryMappingAction>();
 
 
-            //Authentication 
+            //  Authentication 
             CreateMap<RegisterUser, AppUser>();
             CreateMap<LoginUser, AppUser>();
 
@@ -63,12 +65,24 @@ namespace ShopClothing.Application.Mapping
             CreateMap<Sizes, GetSizes>();
 
 
-            //Cart 
+            //  Cart 
             CreateMap<CreateCartItem, CartItems>();
             CreateMap<CartItems, GetCartItem>();
+            CreateMap<UpdateCartItem, CartItems>();
 
 
             CreateMap<Carts, GetCart>();
+            CreateMap<UpdateCart, Carts>();
+            CreateMap<UpdateCartItem, CartItems>();
+
+            //  Order 
+            CreateMap<CreateOrder, Orders>()
+            .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(src => DateTime.UtcNow.AddHours(7)));
+
+            CreateMap<GetCartItem, OrderDetails>()
+                .ForMember(dest => dest.OrderID, opt => opt.Ignore()) 
+                .ReverseMap();
+
         }
     }
 

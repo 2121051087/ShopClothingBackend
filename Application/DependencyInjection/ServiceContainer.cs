@@ -5,11 +5,15 @@ using ShopClothing.Application.Mapping;
 using ShopClothing.Application.Services.Implementations.Authentication;
 using ShopClothing.Application.Services.Implementations.Cart;
 using ShopClothing.Application.Services.Implementations.Category;
+using ShopClothing.Application.Services.Implementations.Order;
+using ShopClothing.Application.Services.Implementations.PayPal;
 using ShopClothing.Application.Services.Implementations.Product;
 using ShopClothing.Application.Services.Interfaces.Authentication;
 using ShopClothing.Application.Services.Interfaces.Basket;
 using ShopClothing.Application.Services.Interfaces.Cart;
 using ShopClothing.Application.Services.Interfaces.Category;
+using ShopClothing.Application.Services.Interfaces.Order;
+using ShopClothing.Application.Services.Interfaces.PayPal;
 using ShopClothing.Application.Services.Interfaces.Product;
 using ShopClothing.Application.Services.Interfaces.Product.Color;
 using ShopClothing.Application.Services.Interfaces.Product.Size;
@@ -38,6 +42,8 @@ namespace ShopClothing.Application.DependencyInjection
             services.AddScoped<ISizeService, SizeService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddHttpClient<IPayPalService, PayPalService>();
 
 
             return services;

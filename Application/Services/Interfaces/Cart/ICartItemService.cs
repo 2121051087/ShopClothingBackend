@@ -11,5 +11,7 @@ namespace ShopClothing.Application.Services.Interfaces.Basket
         Task<ServiceResponse> AddAsync(CreateCartItem item);
         Task<ServiceResponse> UpdateAsync(UpdateCartItem item);
         Task<ServiceResponse> DeleteAsync(Guid id);
+
+        Task<ServiceResponse> ClearCartAsync();
     }
 }

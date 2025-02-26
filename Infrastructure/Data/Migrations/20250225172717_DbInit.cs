@@ -128,6 +128,24 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    TransactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PayerID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentReference = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.TransactionID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -257,28 +275,33 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "Orders",
                 columns: table => new
                 {
-                    TransactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PayerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentMethodID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentMethodID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TransactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeliveryPhone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.TransactionID);
+                    table.PrimaryKey("PK_Orders", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK_Transactions_PaymentMethods_PaymentMethodID",
+                        name: "FK_Orders_PaymentMethods_PaymentMethodID",
                         column: x => x.PaymentMethodID,
                         principalTable: "PaymentMethods",
                         principalColumn: "PaymentMethodID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Transactions_TransactionID",
+                        column: x => x.TransactionID,
+                        principalTable: "Transactions",
+                        principalColumn: "TransactionID");
                 });
 
             migrationBuilder.CreateTable(
@@ -313,36 +336,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                         principalTable: "Sizes",
                         principalColumn: "SizeID",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethodID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TransactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryPhone = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderID);
-                    table.ForeignKey(
-                        name: "FK_Orders_PaymentMethods_PaymentMethodID",
-                        column: x => x.PaymentMethodID,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "PaymentMethodID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_Transactions_TransactionID",
-                        column: x => x.TransactionID,
-                        principalTable: "Transactions",
-                        principalColumn: "TransactionID");
                 });
 
             migrationBuilder.CreateTable(
@@ -386,8 +379,7 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Product_AttributeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuantityBasket = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    QuantityBasket = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -417,8 +409,8 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6e4673e8-a314-4943-a234-1c635864147b", null, "Admin", "ADMIN" },
-                    { "8db341a6-d82c-4036-b0a4-9a1a4edd0ffa", null, "User", "USER" }
+                    { "2a4d4a71-782c-4eb7-a930-b362872800e4", null, "User", "USER" },
+                    { "c75fb203-6a9b-4c6b-8165-b7318b2f8325", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -426,19 +418,19 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 columns: new[] { "ColorID", "ColorHexCode", "ColorName" },
                 values: new object[,]
                 {
-                    { new Guid("2d478c3d-8f5c-4cf5-9ec1-f69239c9b188"), "#800080", "Purple" },
-                    { new Guid("3ea4aca1-ae34-44f1-b9b5-d3f4a006ec09"), "#FFFF00", "Yellow" },
-                    { new Guid("4be846a8-84cd-4128-956b-8fc7d716eda3"), "#FFC0CB", "Pink" },
-                    { new Guid("4faf3673-5210-435c-b993-20f0076f3e2a"), "#FFD700", "Gold" },
-                    { new Guid("557a665c-064d-4859-b7c3-66309aa225c9"), "#008000", "Green" },
-                    { new Guid("5d8dae7d-1ad8-4594-89f6-6ab57f784723"), "#0000FF", "Blue" },
-                    { new Guid("62db93b1-e04d-47af-bd8c-3e097974343b"), "#FFA500", "Orange" },
-                    { new Guid("8e3ca5c5-2e2e-4e69-92c8-d716ff540227"), "#A52A2A", "Brown" },
-                    { new Guid("8ed0fa29-be99-41ed-9f12-6ec40a949525"), "#FF0000", "Red" },
-                    { new Guid("9e6d9483-972a-497f-8798-e87468ea1d72"), "#FFFFFF", "White" },
-                    { new Guid("a5a78efc-f0a5-4bf6-8caa-bc1ce9b49ddb"), "#000000", "Black" },
-                    { new Guid("a84227c2-6885-4823-9417-0d350cc30580"), "#C0C0C0", "Silver" },
-                    { new Guid("ad9f3768-b625-4f55-bb9f-d8882a213a15"), "#808080", "Gray" }
+                    { new Guid("00dbb489-96a6-4b73-a4a6-865528d132f1"), "#0000FF", "Blue" },
+                    { new Guid("2660fbc8-172b-4805-94cb-6ba21a66af9c"), "#808080", "Gray" },
+                    { new Guid("269d375b-bf62-4774-889e-f173bb80041e"), "#FFD700", "Gold" },
+                    { new Guid("329b8677-2760-49b1-81f9-3b6d7a9d81b4"), "#A52A2A", "Brown" },
+                    { new Guid("38012fba-6f42-4420-8780-2480cd421f31"), "#FFFF00", "Yellow" },
+                    { new Guid("669b6985-e02e-4dbc-9b30-b36e293a8236"), "#FFC0CB", "Pink" },
+                    { new Guid("7eb4e2b5-088a-45b0-b217-c818e873306b"), "#FFFFFF", "White" },
+                    { new Guid("931558d4-e4b0-4324-b294-2fc6566fdbe2"), "#800080", "Purple" },
+                    { new Guid("a1c81cd6-f148-4198-a02e-3e04a167167c"), "#000000", "Black" },
+                    { new Guid("d018f44a-c4d4-4d6a-a9d3-cdb37051ff83"), "#C0C0C0", "Silver" },
+                    { new Guid("de015b33-60d3-4f62-ba97-1b9f0de245aa"), "#FFA500", "Orange" },
+                    { new Guid("f6759f85-d63a-4bd4-8f04-97c22774dff0"), "#FF0000", "Red" },
+                    { new Guid("fe8925e6-8643-4a07-b5b6-1162d9c14799"), "#008000", "Green" }
                 });
 
             migrationBuilder.InsertData(
@@ -446,9 +438,9 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 columns: new[] { "PaymentMethodID", "PaymentMethodName" },
                 values: new object[,]
                 {
-                    { new Guid("1549cd45-4fed-4e4b-b166-7c18e62a24d5"), "Credit Card" },
-                    { new Guid("181ebc9b-5a4d-43ee-9e0e-96bb4e25fe21"), "Pay Pal" },
-                    { new Guid("80ae6dcb-bd1f-424a-b8cb-d640dd9fd646"), "Cash On Delivery" }
+                    { new Guid("5de2c754-168e-4d67-bccf-39fe9bec64c6"), "Cash On Delivery" },
+                    { new Guid("87764776-969f-4961-8a20-14a8fc0e5f5a"), "Pay Pal" },
+                    { new Guid("d6979592-f878-49ad-a2cb-acdc71ffaafb"), "Credit Card" }
                 });
 
             migrationBuilder.InsertData(
@@ -456,13 +448,13 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 columns: new[] { "SizeID", "SizeName" },
                 values: new object[,]
                 {
-                    { new Guid("1ed2a862-4114-450e-894b-ab8f80b53cf4"), "XXXL" },
-                    { new Guid("2c164dc5-8e4b-476d-8c3f-f2756b7da668"), "M" },
-                    { new Guid("493e3711-e98c-4e85-9f05-0b8393e57a18"), "XXL" },
-                    { new Guid("4f99b3e7-db25-40fa-a00f-b1f581f78af7"), "XL" },
-                    { new Guid("9ac5921b-f6c6-40ce-b431-8c1639bbd9dc"), "S" },
-                    { new Guid("d9fe57a3-a42f-46a5-9893-7b6c7a108b64"), "XS" },
-                    { new Guid("ffe0a99a-8a17-4801-914b-cec5fcdb0857"), "L" }
+                    { new Guid("1cdae850-e0d7-4c8b-a796-40cc4ada4aca"), "M" },
+                    { new Guid("3137559b-8e23-4d1d-ae84-9c47d6a61c32"), "L" },
+                    { new Guid("55467937-4be7-45ee-b6ce-d542412675fb"), "XXXL" },
+                    { new Guid("666ae20b-3c77-42bd-892f-7737abeee82e"), "XXL" },
+                    { new Guid("8b738fdb-81be-4264-bd36-d5849b37dd3e"), "XS" },
+                    { new Guid("bcddc179-8282-4b3d-a512-d9ea3d2e16ee"), "S" },
+                    { new Guid("d16f1b7f-faf0-4ce8-a6ba-de5ada86e4ae"), "XL" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -563,11 +555,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 name: "IX_Products_CategoryID",
                 table: "Products",
                 column: "CategoryID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_PaymentMethodID",
-                table: "Transactions",
-                column: "PaymentMethodID");
         }
 
         /// <inheritdoc />
@@ -613,6 +600,9 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                 name: "Product_Attributes");
 
             migrationBuilder.DropTable(
+                name: "PaymentMethods");
+
+            migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
@@ -623,9 +613,6 @@ namespace ShopClothing.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sizes");
-
-            migrationBuilder.DropTable(
-                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "Categories");

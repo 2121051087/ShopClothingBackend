@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace ShopClothing.Domain.Interface
 {
@@ -14,6 +10,7 @@ namespace ShopClothing.Domain.Interface
         Task<int> UpdateAsync(TEntity entity);
         Task<int> DeleteAsync(Guid id);
 
+        Task<int> DeleteRangeAsync(IEnumerable<TEntity> entities);
         Task<int> AddRangeAsync(IEnumerable<TEntity> entities);
 
     }

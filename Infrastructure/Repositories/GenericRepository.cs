@@ -32,6 +32,12 @@ namespace ShopClothing.Infrastructure.Repositories
 
         }
 
+        public async Task<int> DeleteRangeAsync(IEnumerable<TEntity> entities)
+        {
+            context.Set<TEntity>().RemoveRange(entities);
+            return await context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await context.Set<TEntity>().AsNoTracking().ToListAsync();
@@ -49,5 +55,10 @@ namespace ShopClothing.Infrastructure.Repositories
             return await context.SaveChangesAsync();
 
         }
+
+        //public async Task<int> SaveChangesAsync()
+        //{
+        //    return await context.SaveChangesAsync();
+        //}
     }
 }

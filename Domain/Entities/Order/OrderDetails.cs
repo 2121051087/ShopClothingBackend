@@ -16,12 +16,10 @@ namespace ShopClothing.Domain.Entities.Order
 
         public int QuantityBasket { get; set; } = 1;
 
-        public decimal Price { get; set; }
-
 
         public Products? Products { get; set; }
 
-        public Order? Order { get; set; }
+        public Orders? Order { get; set; }
 
         public Product_Attributes? Product_Attributes { get; set; } 
 

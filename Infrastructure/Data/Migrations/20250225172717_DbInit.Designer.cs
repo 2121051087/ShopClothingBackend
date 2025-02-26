@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Infrastructure.Data;
 namespace ShopClothing.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250225172717_DbInit")]
+    partial class DbInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6e4e869a-9c27-41ea-bdda-66518bd3dec3",
+                            Id = "c75fb203-6a9b-4c6b-8165-b7318b2f8325",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "536786dd-e6fb-491e-beef-e1a8393a41eb",
+                            Id = "2a4d4a71-782c-4eb7-a930-b362872800e4",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -407,17 +410,17 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            PaymentMethodID = new Guid("d1148003-4582-48ea-8231-2eb281a3d3fe"),
+                            PaymentMethodID = new Guid("5de2c754-168e-4d67-bccf-39fe9bec64c6"),
                             PaymentMethodName = "Cash On Delivery"
                         },
                         new
                         {
-                            PaymentMethodID = new Guid("315100a4-d267-4b66-b031-0f365998cd6d"),
+                            PaymentMethodID = new Guid("d6979592-f878-49ad-a2cb-acdc71ffaafb"),
                             PaymentMethodName = "Credit Card"
                         },
                         new
                         {
-                            PaymentMethodID = new Guid("19da9456-9e55-4450-916e-6b3c07f19537"),
+                            PaymentMethodID = new Guid("87764776-969f-4961-8a20-14a8fc0e5f5a"),
                             PaymentMethodName = "Pay Pal"
                         });
                 });
@@ -429,14 +432,13 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PayerID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("PayerID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PaymentID")
                         .HasColumnType("nvarchar(max)");
@@ -476,79 +478,79 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ColorID = new Guid("110d0bfe-52c1-4be0-ac9d-922da3be383e"),
+                            ColorID = new Guid("f6759f85-d63a-4bd4-8f04-97c22774dff0"),
                             ColorHexCode = "#FF0000",
                             ColorName = "Red"
                         },
                         new
                         {
-                            ColorID = new Guid("0f54f40a-b64e-4ebf-b835-64ae0d7e8fb2"),
+                            ColorID = new Guid("00dbb489-96a6-4b73-a4a6-865528d132f1"),
                             ColorHexCode = "#0000FF",
                             ColorName = "Blue"
                         },
                         new
                         {
-                            ColorID = new Guid("4fefec72-a491-4dda-9a19-94805cce0d5c"),
+                            ColorID = new Guid("7eb4e2b5-088a-45b0-b217-c818e873306b"),
                             ColorHexCode = "#FFFFFF",
                             ColorName = "White"
                         },
                         new
                         {
-                            ColorID = new Guid("a5dc52ae-29ca-41c6-94a6-7122e31f3bbc"),
+                            ColorID = new Guid("a1c81cd6-f148-4198-a02e-3e04a167167c"),
                             ColorHexCode = "#000000",
                             ColorName = "Black"
                         },
                         new
                         {
-                            ColorID = new Guid("63e88647-70b9-46e0-84c3-74360bdcfd0b"),
+                            ColorID = new Guid("38012fba-6f42-4420-8780-2480cd421f31"),
                             ColorHexCode = "#FFFF00",
                             ColorName = "Yellow"
                         },
                         new
                         {
-                            ColorID = new Guid("a49d9f25-2289-4460-8222-53f87324ff85"),
+                            ColorID = new Guid("fe8925e6-8643-4a07-b5b6-1162d9c14799"),
                             ColorHexCode = "#008000",
                             ColorName = "Green"
                         },
                         new
                         {
-                            ColorID = new Guid("774863c3-ba4d-4159-a039-a9b9e66b4a58"),
+                            ColorID = new Guid("931558d4-e4b0-4324-b294-2fc6566fdbe2"),
                             ColorHexCode = "#800080",
                             ColorName = "Purple"
                         },
                         new
                         {
-                            ColorID = new Guid("300a8df6-c965-4892-b593-1ddf9223d7ff"),
+                            ColorID = new Guid("669b6985-e02e-4dbc-9b30-b36e293a8236"),
                             ColorHexCode = "#FFC0CB",
                             ColorName = "Pink"
                         },
                         new
                         {
-                            ColorID = new Guid("9f8ee37a-cd34-4398-91fe-19d690017d20"),
+                            ColorID = new Guid("de015b33-60d3-4f62-ba97-1b9f0de245aa"),
                             ColorHexCode = "#FFA500",
                             ColorName = "Orange"
                         },
                         new
                         {
-                            ColorID = new Guid("747b6a95-09dc-4577-bc7b-c6a962913ac7"),
+                            ColorID = new Guid("329b8677-2760-49b1-81f9-3b6d7a9d81b4"),
                             ColorHexCode = "#A52A2A",
                             ColorName = "Brown"
                         },
                         new
                         {
-                            ColorID = new Guid("5b5bf63d-df58-48d6-a05b-be28069bde03"),
+                            ColorID = new Guid("2660fbc8-172b-4805-94cb-6ba21a66af9c"),
                             ColorHexCode = "#808080",
                             ColorName = "Gray"
                         },
                         new
                         {
-                            ColorID = new Guid("999607f6-a7c6-44f6-9808-55ecbb111a14"),
+                            ColorID = new Guid("d018f44a-c4d4-4d6a-a9d3-cdb37051ff83"),
                             ColorHexCode = "#C0C0C0",
                             ColorName = "Silver"
                         },
                         new
                         {
-                            ColorID = new Guid("0baeb666-1a46-4921-be87-b789d71309c0"),
+                            ColorID = new Guid("269d375b-bf62-4774-889e-f173bb80041e"),
                             ColorHexCode = "#FFD700",
                             ColorName = "Gold"
                         });
@@ -633,37 +635,37 @@ namespace ShopClothing.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            SizeID = new Guid("89c8ab2c-26d8-4fc0-adf2-1db2776b1029"),
+                            SizeID = new Guid("8b738fdb-81be-4264-bd36-d5849b37dd3e"),
                             SizeName = "XS"
                         },
                         new
                         {
-                            SizeID = new Guid("1ca41ce8-30b7-47ea-8167-0de7789768c2"),
+                            SizeID = new Guid("bcddc179-8282-4b3d-a512-d9ea3d2e16ee"),
                             SizeName = "S"
                         },
                         new
                         {
-                            SizeID = new Guid("7b89b814-ce37-411c-b65b-ef4c894af626"),
+                            SizeID = new Guid("1cdae850-e0d7-4c8b-a796-40cc4ada4aca"),
                             SizeName = "M"
                         },
                         new
                         {
-                            SizeID = new Guid("2ad70736-b059-4705-8505-42462b25c5af"),
+                            SizeID = new Guid("3137559b-8e23-4d1d-ae84-9c47d6a61c32"),
                             SizeName = "L"
                         },
                         new
                         {
-                            SizeID = new Guid("82267ddc-d4e8-4bfa-9c5a-7d3f853427f7"),
+                            SizeID = new Guid("d16f1b7f-faf0-4ce8-a6ba-de5ada86e4ae"),
                             SizeName = "XL"
                         },
                         new
                         {
-                            SizeID = new Guid("f52fabe7-87c8-4ca1-b7e1-2dcc22e7ade3"),
+                            SizeID = new Guid("666ae20b-3c77-42bd-892f-7737abeee82e"),
                             SizeName = "XXL"
                         },
                         new
                         {
-                            SizeID = new Guid("1b61283c-16c4-4620-92c4-c13f058e6c76"),
+                            SizeID = new Guid("55467937-4be7-45ee-b6ce-d542412675fb"),
                             SizeName = "XXXL"
                         });
                 });

@@ -3,6 +3,7 @@ using AutoMapper;
 using ShopClothing.Application.DTOs;
 using ShopClothing.Application.DTOs.Cart;
 using ShopClothing.Application.DTOs.Cart.CartItem;
+using ShopClothing.Application.DTOs.Product;
 using ShopClothing.Application.Services.Interfaces.Basket;
 using ShopClothing.Application.Services.Interfaces.Cart;
 using ShopClothing.Domain.Entities.Cart;
@@ -14,10 +15,7 @@ namespace ShopClothing.Application.Services.Implementations.Cart
     public class CartService(IGeneric<Carts> CartInterface,ICartRepository cartRepository 
         ,ICartItemService cartItemService,IMapper mapper) : ICartService
     {
-        public Task<ServiceResponse> ClearCartAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public async Task<GetCart> GetCartAsync(string userId)
         {
@@ -26,11 +24,32 @@ namespace ShopClothing.Application.Services.Implementations.Cart
 
             var getCart = mapper.Map<GetCart>(cart);
 
-            getCart.CartItems = cart.CartItems.Select(item => mapper.Map<GetCartItem>(item)).ToList();
+            getCart.CartItems = cart.CartItems.Select(
+                item =>
+                {
+                    var getCartItem = mapper.Map<GetCartItem>(item);
+                    getCartItem.GetProduct = mapper.Map<GetProduct>(item.Products);
+                    return getCartItem;
+                }
+            ).ToList();
 
             return getCart;
         }
 
+        public async Task<ServiceResponse> UpdateCart(UpdateCart updateCart)
+        {
+            var cart = await cartRepository.GetExistCartItems(updateCart.CartID);
+            if (cart == null) return new ServiceResponse(false, "Cart items not found");
 
+            foreach (var item in updateCart.cartItems)
+            {
+                var cartItem = cart.CartItems.FirstOrDefault(x => x.CartItemID == item.CartItemID);
+                if (cartItem == null) return new ServiceResponse(false, "Cart item not found");
+                cartItem.QuantityBasket = item.QuantityBasket;
+            }
+
+            await CartInterface.UpdateAsync(cart);
+            return new ServiceResponse(true, "Cart updated successfully");
+        }
     }
 }

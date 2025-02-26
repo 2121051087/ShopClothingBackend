@@ -4,15 +4,15 @@ using ShopClothing.Domain.Entities.Payment;
 
 namespace ShopClothing.Domain.Entities.Order
 {
-    public class Order
+    public class Orders
     {
         public Guid OrderID { get; set; }
 
-        public Guid UserID { get; set; }
+        public string UserID { get; set; } = null!;  
 
         public decimal TotalAmount { get; set; }
 
-        public string OrderStatus { get; set; } = "Pending";
+        public string? OrderStatus { get; set; } 
 
         public DateTime OrderDate { get; set; }
 

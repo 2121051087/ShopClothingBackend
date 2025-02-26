@@ -25,7 +25,6 @@ namespace ShopClothing.Domain.Entities.Product
        
         public Categories? Categories { get; set; }
 
-     
         public ICollection<CartItems>? CartItems { get; set; } 
 
         public ICollection<Product_Attributes>? Product_Attributes { get; set; } 

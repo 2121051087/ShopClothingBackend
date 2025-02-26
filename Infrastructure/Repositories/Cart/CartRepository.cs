@@ -9,14 +9,25 @@ namespace ShopClothing.Infrastructure.Repositories.Cart
 {
     public class CartRepository(AppDbContext context) : ICartRepository
     {
+        public async Task<Carts> GetExistCartItems(Guid CartID)
+        {
+            var existCart = await context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Products)
+                .ThenInclude(p => p!.Product_Attributes)
+                .FirstOrDefaultAsync(c => c.CartID == CartID);
+            return existCart!;
+        }
+
         public async Task<Carts> GetOrCreateCartAsync(string userId)
         {
             var existingCart = await context.Carts
                                             .Include(c => c.CartItems)
                                             .ThenInclude(ci => ci.Products)
+                                            .ThenInclude(p => p!.Product_Attributes)
                                             .FirstOrDefaultAsync(c => c.UserID.ToString() == userId);
 
-            if(existingCart is not null)
+            if (existingCart is not null)
                 return existingCart;
 
             var newCart = new Carts
@@ -36,10 +47,12 @@ namespace ShopClothing.Infrastructure.Repositories.Cart
         {
             var productAttribute = context.Product_Attributes
                 .FirstOrDefault(p => p.Product_AttributeID == ProductAttributeID);
-            if(productAttribute is null)
+            if (productAttribute is null)
                 return 0;
 
             return productAttribute.Quantity;
         }
+
+
     }
 }

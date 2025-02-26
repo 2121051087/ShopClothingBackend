@@ -8,6 +8,9 @@ namespace ShopClothing.Domain.Interface.Cart
     {
          Task<Carts> GetOrCreateCartAsync(string userId);
 
-        int QuantityProductAttributesStock(Guid ProductAttributeID);
+         int QuantityProductAttributesStock(Guid ProductAttributeID);
+
+         Task<Carts> GetExistCartItems(Guid CartID);
+
     }
 }

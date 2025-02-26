@@ -7,6 +7,7 @@ using ShopClothing.Domain.Entities.Identity;
 using ShopClothing.Domain.Entities.Order;
 using ShopClothing.Domain.Entities.Payment;
 using ShopClothing.Domain.Entities.Product;
+using System.Reflection.Emit;
 
 namespace ShopClothing.Infrastructure.Data
 {
@@ -31,7 +32,7 @@ namespace ShopClothing.Infrastructure.Data
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<Transactions> Transactions { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Orders> Orders { get; set; }
 
         public DbSet<OrderDetails> OrderDetails { get; set; }
 
@@ -253,13 +254,12 @@ namespace ShopClothing.Infrastructure.Data
                 entity.ToTable("Transactions")
                       .HasKey(t => t.TransactionID);
 
-                entity.HasOne(pm => pm.PaymentMethod);
             });
 
 
             // order 
 
-            builder.Entity<Order>(entity =>
+            builder.Entity<Orders>(entity =>
             {
                 entity.ToTable("Orders")
                       .HasKey(o => o.OrderID);
@@ -284,6 +284,11 @@ namespace ShopClothing.Infrastructure.Data
                       .HasForeignKey(od => od.Product_AttributeID)
                       .OnDelete(DeleteBehavior.Restrict);
             });
+
+
+            builder.Entity<Transactions>()
+                   .Property(t => t.Amount)
+                   .HasPrecision(18, 4); // 18 chữ số, 4 số sau dấu phẩy
         }
 
     }

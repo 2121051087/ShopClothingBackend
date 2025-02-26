@@ -16,7 +16,7 @@ namespace ShopClothing.Application.DTOs.Product.ProductAttributes
 
         public int Quantity { get; set; }
 
-        
+       
 
         //   public string? ImageUrl { get; set; }
         [JsonIgnore]
